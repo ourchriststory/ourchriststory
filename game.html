@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Addition Challenge</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #game-container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #problem {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #answer {
+            font-size: 18px;
+            padding: 5px;
+            width: 100px;
+        }
+        #submit {
+            font-size: 18px;
+            padding: 5px 15px;
+            margin-top: 10px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        #score, #strikes {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Addition Challenge</h1>
+        <div id="problem"></div>
+        <input type="number" id="answer" autofocus>
+        <br>
+        <button id="submit">Submit</button>
+        <div id="result"></div>
+        <div id="score">Score: 0</div>
+        <div id="strikes">Strikes: 0</div>
+    </div>
+
+    <script>
+        let num1, num2, correctAnswer;
+        let score = 0;
+        let strikes = 0;
+        let difficulty = 1;
+
+        function generateProblem() {
+            num1 = Math.floor(Math.random() * (10 * difficulty)) + 1;
+            num2 = Math.floor(Math.random() * (10 * difficulty)) + 1;
+            correctAnswer = num1 + num2;
+            document.getElementById('problem').textContent = `${num1} + ${num2} = ?`;
+        }
+
+        function checkAnswer() {
+            const userAnswer = parseInt(document.getElementById('answer').value);
+            const resultElement = document.getElementById('result');
+
+            if (userAnswer === correctAnswer) {
+                resultElement.textContent = 'Correct!';
+                resultElement.style.color = 'green';
+                score++;
+                difficulty++;
+            } else {
+                resultElement.textContent = 'Incorrect. Try again.';
+                resultElement.style.color = 'red';
+                strikes++;
+            }
+
+            document.getElementById('score').textContent = `Score: ${score}`;
+            document.getElementById('strikes').textContent = `Strikes: ${strikes}`;
+
+            if (strikes >= 3) {
+                alert(`Game Over! Your final score is ${score}.`);
+                resetGame();
+            } else {
+                generateProblem();
+            }
+
+            document.getElementById('answer').value = '';
+            document.getElementById('answer').focus();
+        }
+
+        function resetGame() {
+            score = 0;
+            strikes = 0;
+            difficulty = 1;
+            document.getElementById('score').textContent = 'Score: 0';
+            document.getElementById('strikes').textContent = 'Strikes: 0';
+            generateProblem();
+        }
+
+        document.getElementById('submit').addEventListener('click', checkAnswer);
+        document.getElementById('answer').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        generateProblem();
+    </script>
+</body>
+</html>
